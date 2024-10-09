@@ -2,7 +2,6 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 
 public class TankController : MonoBehaviourPun
@@ -14,20 +13,24 @@ public class TankController : MonoBehaviourPun
 
     void Update()
     {
-        if (photonView.IsMine)
+        if (photonView != null)
         {
-            Move();
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (photonView.IsMine)
             {
-                Fire();
+                Move();
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Fire();
+                }
             }
         }
     }
 
     void Move()
     {
-        float move = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
-        float rotate = -Input.GetAxis("Horizontal") * rotateSpeed * Time.deltaTime;
+        float move = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        float rotate = -Input.GetAxis("Vertical") * rotateSpeed * Time.deltaTime;
 
         transform.Translate(0, move, 0);
         transform.Rotate(0, 0, rotate);
@@ -35,7 +38,7 @@ public class TankController : MonoBehaviourPun
 
     void Fire()
     {
-        PhotonNetwork.Instantiate("Prefabs/Bullet", firePoint.position, firePoint.rotation);
+        PhotonNetwork.Instantiate("Prefabs/bullet", firePoint.position, firePoint.rotation);
     }
 
 }

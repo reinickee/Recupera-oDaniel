@@ -64,7 +64,7 @@ namespace Photon.Pun
     public static partial class PhotonNetwork
     {
         /// <summary>Version number of PUN. Used in the AppVersion, which separates your playerbase in matchmaking.</summary>
-        public const string PunVersion = "2.47";
+        public const string PunVersion = "2.45";
 
         /// <summary>Version number of your game. Setting this updates the AppVersion, which separates your playerbase in matchmaking.</summary>
         /// <remarks>
@@ -462,7 +462,8 @@ namespace Photon.Pun
 
                 if (offlineMode)
                 {
-                    NetworkingClient.ChangeLocalID(-1, true);
+                    NetworkingClient.ChangeLocalID(-1);
+                    //SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
                     NetworkingClient.ConnectionCallbackTargets.OnConnectedToMaster();
                 }
                 else
@@ -2054,7 +2055,7 @@ namespace Photon.Pun
         private static void EnterOfflineRoom(string roomName, RoomOptions roomOptions, bool createdRoom)
         {
             offlineModeRoom = new Room(roomName, roomOptions, true);
-            NetworkingClient.ChangeLocalID(1, true);
+            NetworkingClient.ChangeLocalID(1);
             offlineModeRoom.masterClientId = 1;
             offlineModeRoom.AddPlayer(PhotonNetwork.LocalPlayer);
             offlineModeRoom.LoadBalancingClient = PhotonNetwork.NetworkingClient;
