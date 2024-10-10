@@ -4,41 +4,70 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TankController : MonoBehaviourPun
+public class TankController : MonoBehaviourPun, IDamageable
 {
     public float moveSpeed = 5f;
     public float rotateSpeed = 150f;
+    public int maxHealth = 100;      // Vida máxima do tanque
+    private int currentHealth;
+
     public GameObject bulletPrefab;
     public Transform firePoint;
 
+    void Start()
+    {
+        // Inicia o tanque com a vida máxima
+        currentHealth = maxHealth;
+    }
+
     void Update()
     {
-        if (photonView != null)
+        if (photonView.IsMine)
         {
-            if (photonView.IsMine)
-            {
-                Move();
+            HandleMovement();
 
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    Fire();
-                }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Fire();
             }
         }
     }
 
-    void Move()
+    // Função para controlar o movimento do tanque
+    void HandleMovement()
     {
-        float move = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        float rotate = -Input.GetAxis("Vertical") * rotateSpeed * Time.deltaTime;
+        float move = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        float rotate = Input.GetAxis("Horizontal") * rotateSpeed * Time.deltaTime;
 
-        transform.Translate(0, move, 0);
-        transform.Rotate(0, 0, rotate);
+        transform.Translate(Vector3.up * move);
+        transform.Rotate(Vector3.forward, -rotate);
     }
 
+    // Função para disparar um projétil
     void Fire()
     {
-        PhotonNetwork.Instantiate("Prefabs/bullet", firePoint.position, firePoint.rotation);
+        PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
     }
 
+    // Implementação da interface IDamageable para receber dano
+    public void TakeDamage(int damageAmount)
+    {
+        // Reduz a vida atual com base no dano recebido
+        currentHealth -= damageAmount;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    // Função para "morrer" (destruir o tanque ou desabilitar)
+    void Die()
+    {
+        if (photonView.IsMine)
+        {
+            // Destroi o tanque na rede (ou qualquer outra lógica de morte)
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
 }
