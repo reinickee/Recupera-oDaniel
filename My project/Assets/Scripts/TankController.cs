@@ -11,7 +11,7 @@ public class TankController : MonoBehaviourPun, IDamageable
     public int maxHealth = 100;      // Vida máxima do tanque
     private int currentHealth;
 
-    public GameObject bulletPrefab;
+    
     public Transform firePoint;
 
     void Start()
@@ -46,7 +46,7 @@ public class TankController : MonoBehaviourPun, IDamageable
     // Função para disparar um projétil
     void Fire()
     {
-        PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
+        PhotonNetwork.Instantiate("Prefabs/bullet", firePoint.position, firePoint.rotation);
     }
 
     // Implementação da interface IDamageable para receber dano
