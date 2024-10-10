@@ -9,10 +9,31 @@ public class TankController : MonoBehaviourPun, IDamageable
     public float rotateSpeed = 150f;
     public int maxHealth = 100;
     private int currentHealth;
+    public Vector2 minBounds;   // Limite mínimo para X e Y
+    public Vector2 maxBounds;   // Limite máximo para X e Y
+
 
     public GameObject bulletPrefab;
     public Transform firePoint;
 
+    void ClampPosition()
+    {
+        // Limita a posição do jogador dentro dos bounds
+        Vector3 clampedPosition = transform.position;
+        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
+        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
+
+        transform.position = clampedPosition;
+    }
+    void Awake()
+    {
+         Camera cam = Camera.main;
+         Vector2 screenBounds = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, cam.transform.position.z));
+
+         minBounds = new Vector2(-screenBounds.x, -screenBounds.y);
+         maxBounds = new Vector2(screenBounds.x, screenBounds.y);
+        
+    }
     void Start()
     {
 
@@ -27,6 +48,7 @@ public class TankController : MonoBehaviourPun, IDamageable
 
     void Update()
     {
+        ClampPosition();
         if (photonView.IsMine)
         {
             HandleMovement();
