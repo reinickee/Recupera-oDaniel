@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 454302887}
   - component: {fileID: 454302886}
   - component: {fileID: 454302890}
+  - component: {fileID: 454302891}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -158,7 +159,6 @@ MonoBehaviour:
   moveSpeed: 5
   rotateSpeed: 150
   maxHealth: 100
-  bulletPrefab: {fileID: 0}
   firePoint: {fileID: 0}
 --- !u!50 &454302887
 Rigidbody2D:
@@ -272,10 +272,27 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 454302891}
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &454302891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454302885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
