@@ -3,33 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Bullet : MonoBehaviourPun
+public class Bullet : MonoBehaviourPun, IWeapon
 {
-    public float speed = 10f;
-    public float lifeTime = 2f;
-    public int damage = 20;  // Quantidade de dano que a bala causa
+    public GameObject bulletPrefab;   // Prefab do projétil
+    public Transform firePoint;       // Ponto de onde o projétil será disparado
+    public float reloadTime = 1f;     // Tempo de recarga entre disparos
+    private float nextFireTime = 0f;  // Controla o tempo até o próximo disparo
 
     void Start()
     {
-        GetComponent<Rigidbody2D>().velocity = transform.up * speed;
-        Destroy(gameObject, lifeTime);  // Destruir após determinado tempo
+        PhotonNetwork.ConnectUsingSettings(); // Conecta ao Photon
+    }
+    // Implementação da propriedade de recarga da interface
+    public float ReloadTime
+    {
+        get { return reloadTime; }
+    }
+
+    void Update()
+    {
+        if (photonView.IsMine && Input.GetKeyDown(KeyCode.Space))
+        {
+            Fire();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Verifica se o objeto com o qual colidimos implementa a interface IDamageable
-        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-
-        if (damageable != null)
-        {
-            // Aplica dano ao objeto
-            damageable.TakeDamage(damage);
-        }
-
-        // Destroi o projétil ao colidir
+        // Aqui pode ir a lógica de dano
         if (photonView.IsMine)
         {
-            PhotonNetwork.Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject); // Destroi a bala na rede
+        }
+    }
+
+        // Implementação do método Fire da interface IWeapon
+    public void Fire()
+    {
+        if (Time.time >= nextFireTime)
+        {
+            // Dispara o projétil
+            PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
+            nextFireTime = Time.time + reloadTime;
+
         }
     }
 }

@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class TankController : MonoBehaviourPun, IDamageable, IWeapon
+public class TankController : MonoBehaviourPun, IDamageable
 {
     public float moveSpeed = 5f;
     public float rotateSpeed = 150f;
@@ -16,7 +15,14 @@ public class TankController : MonoBehaviourPun, IDamageable, IWeapon
 
     void Start()
     {
+
         currentHealth = maxHealth;
+
+        // Apenas o jogador local controla o tanque
+        if (!photonView.IsMine)
+        {
+            Destroy(GetComponent<Rigidbody2D>());
+        }
     }
 
     void Update()
@@ -27,7 +33,7 @@ public class TankController : MonoBehaviourPun, IDamageable, IWeapon
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Fire();  // Chama o método Fire da interface IWeapon
+                Fire();
             }
         }
     }
@@ -43,7 +49,10 @@ public class TankController : MonoBehaviourPun, IDamageable, IWeapon
 
     public void Fire()
     {
-        PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
+        if (bulletPrefab && firePoint)
+        {
+            PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
+        }
     }
 
     public void TakeDamage(int damageAmount)
@@ -58,9 +67,18 @@ public class TankController : MonoBehaviourPun, IDamageable, IWeapon
 
     void Die()
     {
+        GameManager.instance.UpdateScore(PhotonNetwork.NickName);
+
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);
+            Invoke("Respawn", 3f); // Renasce após 3 segundos
         }
+    }
+
+    void Respawn()
+    {
+        Vector3 spawnPosition = GameManager.instance.GetRandomSpawnPosition();
+        PhotonNetwork.Instantiate(gameObject.name, spawnPosition, Quaternion.identity);
     }
 }
