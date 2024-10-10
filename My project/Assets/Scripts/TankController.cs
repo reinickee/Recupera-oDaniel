@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TankController : MonoBehaviourPun, IDamageable
+public class TankController : MonoBehaviourPun, IDamageable, IWeapon
 {
     public float moveSpeed = 5f;
     public float rotateSpeed = 150f;
-    public int maxHealth = 100;      // Vida máxima do tanque
+    public int maxHealth = 100;
     private int currentHealth;
 
-    
+    public GameObject bulletPrefab;
     public Transform firePoint;
 
     void Start()
     {
-        // Inicia o tanque com a vida máxima
         currentHealth = maxHealth;
     }
 
@@ -28,12 +27,11 @@ public class TankController : MonoBehaviourPun, IDamageable
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Fire();
+                Fire();  // Chama o método Fire da interface IWeapon
             }
         }
     }
 
-    // Função para controlar o movimento do tanque
     void HandleMovement()
     {
         float move = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
@@ -43,16 +41,13 @@ public class TankController : MonoBehaviourPun, IDamageable
         transform.Rotate(Vector3.forward, -rotate);
     }
 
-    // Função para disparar um projétil
-    void Fire()
+    public void Fire()
     {
-        PhotonNetwork.Instantiate("Prefabs/bullet", firePoint.position, firePoint.rotation);
+        PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
     }
 
-    // Implementação da interface IDamageable para receber dano
     public void TakeDamage(int damageAmount)
     {
-        // Reduz a vida atual com base no dano recebido
         currentHealth -= damageAmount;
 
         if (currentHealth <= 0)
@@ -61,12 +56,10 @@ public class TankController : MonoBehaviourPun, IDamageable
         }
     }
 
-    // Função para "morrer" (destruir o tanque ou desabilitar)
     void Die()
     {
         if (photonView.IsMine)
         {
-            // Destroi o tanque na rede (ou qualquer outra lógica de morte)
             PhotonNetwork.Destroy(gameObject);
         }
     }
