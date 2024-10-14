@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviourPun, IWeapon
     public Transform firePoint;       // Ponto de onde o projétil será disparado
     public float reloadTime = 1f;     // Tempo de recarga entre disparos
     private float nextFireTime = 0f;  // Controla o tempo até o próximo disparo
+    public float bulletSpeed = 10f;   // Velocidade da bala
 
     void Start()
     {
@@ -42,10 +43,17 @@ public class Bullet : MonoBehaviourPun, IWeapon
     {
         if (Time.time >= nextFireTime)
         {
-            // Dispara o projétil
-            PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
-            nextFireTime = Time.time + reloadTime;
+            // Instancia o projétil na rede
+            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
 
+            // Aplica movimento para frente na bala
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = firePoint.up * bulletSpeed;  // Move a bala na direção do firePoint
+            }
+
+            nextFireTime = Time.time + reloadTime;
         }
     }
 }

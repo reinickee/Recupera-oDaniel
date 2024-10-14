@@ -93,7 +93,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3035379130049526855}
-  - component: {fileID: 6099887738043138371}
   m_Layer: 0
   m_Name: firePoint
   m_TagString: Untagged
@@ -116,21 +115,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1509586949900175930}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6099887738043138371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7819845336663504413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d07281cf169c604b9fb00e97aea8319, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 3092659666145155582, guid: 7f1616daf2508e641b7d073308ec65dc, type: 3}
-  firePoint: {fileID: 3035379130049526855}
-  reloadTime: 1
 --- !u!1 &8112724739206572149
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,6 +129,7 @@ GameObject:
   - component: {fileID: 3412970478692956533}
   - component: {fileID: 95131120946082512}
   - component: {fileID: 6521104942397123726}
+  - component: {fileID: 8353046689449024406}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -213,8 +198,8 @@ MonoBehaviour:
   maxHealth: 100
   minBounds: {x: 0, y: 0}
   maxBounds: {x: 0, y: 0}
-  bulletPrefab: {fileID: 3092659666145155582, guid: 7f1616daf2508e641b7d073308ec65dc, type: 3}
-  firePoint: {fileID: 3035379130049526855}
+  bulletPrefab: {fileID: 0}
+  firePoint: {fileID: 0}
 --- !u!114 &3412970478692956533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,3 +291,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8353046689449024406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112724739206572149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d07281cf169c604b9fb00e97aea8319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 3092659666145155582, guid: 7f1616daf2508e641b7d073308ec65dc, type: 3}
+  firePoint: {fileID: 3035379130049526855}
+  reloadTime: 1
+  bulletSpeed: 10
