@@ -392,8 +392,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8112724739206572149, guid: 87c671cc2f87275488d7eed67f455cf3, type: 3}
-  timerText: {fileID: 0}
-  scoreText: {fileID: 0}
+  timerText: {fileID: 239615784}
+  scoreText: {fileID: 1916223150}
   gameTime: 120
 --- !u!4 &852053355
 Transform:
