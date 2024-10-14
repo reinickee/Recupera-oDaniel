@@ -54,6 +54,7 @@ public class Bullet : MonoBehaviourPun, IWeapon
             }
 
             nextFireTime = Time.time + reloadTime;
+           
         }
     }
 }
