@@ -9,12 +9,13 @@ public class Bullet : MonoBehaviourPun, IWeapon
     public Transform firePoint;       // Ponto de onde o projétil será disparado
     public float reloadTime = 1f;     // Tempo de recarga entre disparos
     private float nextFireTime = 0f;  // Controla o tempo até o próximo disparo
-    public float bulletSpeed = 10f;   // Velocidade da bala
+    public float bulletSpeed = 10f;    // Velocidade da bala
 
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings(); // Conecta ao Photon
     }
+
     // Implementação da propriedade de recarga da interface
     public float ReloadTime
     {
@@ -38,23 +39,28 @@ public class Bullet : MonoBehaviourPun, IWeapon
         }
     }
 
-        // Implementação do método Fire da interface IWeapon
+    // Implementação do método Fire da interface IWeapon
     public void Fire()
     {
         if (Time.time >= nextFireTime)
         {
-            // Instancia o projétil na rede
-            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
-
-            // Aplica movimento para frente na bala
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.velocity = firePoint.up * bulletSpeed;  // Move a bala na direção do firePoint
-            }
-
+            // Chama o método RPC para disparar a bala
+            photonView.RPC("RPCFireBullet", RpcTarget.All, firePoint.position, firePoint.rotation);
             nextFireTime = Time.time + reloadTime;
-           
+        }
+    }
+
+    [PunRPC]
+    void RPCFireBullet(Vector3 position, Quaternion rotation)
+    {
+        // Instancia o projétil na rede
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, position, rotation);
+
+        // Aplica movimento para frente na bala
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = firePoint.up * bulletSpeed;  // Move a bala na direção do firePoint
         }
     }
 }

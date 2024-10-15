@@ -51,6 +51,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Atualiza a pontuação de cada jogador
     public void UpdateScore(string playerName)
     {
+        photonView.RPC("RPCUpdateScore", RpcTarget.All, playerName);
+    }
+
+    [PunRPC]
+    void RPCUpdateScore(string playerName)
+    {
         if (!playerScores.ContainsKey(playerName))
         {
             playerScores[playerName] = 0;
@@ -75,6 +81,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         gameEnded = true;
         string winner = GetWinner();
         Debug.Log("Vencedor: " + winner);
+        // Aqui você pode adicionar lógica para mostrar o vencedor na UI
     }
 
     // Determina quem ganhou

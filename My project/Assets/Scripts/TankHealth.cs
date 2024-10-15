@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using Photon.Pun;
+
+public class TankHealth : MonoBehaviourPun
+{
+    public float maxHealth = 100f, currentHealth;
+    public Image healthBarForeground;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthBar();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        // Chama o método RPC para aplicar dano
+        photonView.RPC("RPCTakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPCTakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        UpdateHealthBar();
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void UpdateHealthBar()
+    {
+        if (healthBarForeground != null)
+        {
+            healthBarForeground.fillAmount = currentHealth / maxHealth;
+        }
+    }
+
+    void Die()
+    {
+        // Aqui você pode adicionar lógica de morte, como animações ou efeitos
+        PhotonNetwork.Destroy(gameObject); // Destroi o tanque na rede
+    }
+}

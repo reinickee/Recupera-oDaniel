@@ -12,7 +12,6 @@ public class TankController : MonoBehaviourPun, IDamageable
     public Vector2 minBounds;   // Limite mínimo para X e Y
     public Vector2 maxBounds;   // Limite máximo para X e Y
 
-
     public GameObject bulletPrefab;
     public Transform firePoint;
 
@@ -25,18 +24,18 @@ public class TankController : MonoBehaviourPun, IDamageable
 
         transform.position = clampedPosition;
     }
+
     void Awake()
     {
-         Camera cam = Camera.main;
-         Vector2 screenBounds = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, cam.transform.position.z));
+        Camera cam = Camera.main;
+        Vector2 screenBounds = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, cam.transform.position.z));
 
-         minBounds = new Vector2(-screenBounds.x, -screenBounds.y);
-         maxBounds = new Vector2(screenBounds.x, screenBounds.y);
-        
+        minBounds = new Vector2(-screenBounds.x, -screenBounds.y);
+        maxBounds = new Vector2(screenBounds.x, screenBounds.y);
     }
+
     void Start()
     {
-
         currentHealth = maxHealth;
 
         // Apenas o jogador local controla o tanque
@@ -78,6 +77,12 @@ public class TankController : MonoBehaviourPun, IDamageable
     }
 
     public void TakeDamage(int damageAmount)
+    {
+        photonView.RPC("RPCTakeDamage", RpcTarget.All, damageAmount);
+    }
+
+    [PunRPC]
+    void RPCTakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
 
