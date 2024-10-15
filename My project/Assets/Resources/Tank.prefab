@@ -576,4 +576,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
-  healthBarForeground: {fileID: 0}
+  healthBarForeground: {fileID: 9191831794818613888}
