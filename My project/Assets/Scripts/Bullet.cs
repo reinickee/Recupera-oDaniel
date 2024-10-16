@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -9,14 +8,13 @@ public class Bullet : MonoBehaviourPun, IWeapon
     public Transform firePoint;       // Ponto de onde o projétil será disparado
     public float reloadTime = 1f;     // Tempo de recarga entre disparos
     private float nextFireTime = 0f;  // Controla o tempo até o próximo disparo
-    public float bulletSpeed = 10f;    // Velocidade da bala
+    public float bulletSpeed = 10f;   // Velocidade da bala
 
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings(); // Conecta ao Photon
     }
 
-    // Implementação da propriedade de recarga da interface
     public float ReloadTime
     {
         get { return reloadTime; }
@@ -32,20 +30,21 @@ public class Bullet : MonoBehaviourPun, IWeapon
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Aqui pode ir a lógica de dano
+        // Lógica de colisão e destruição
         if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject); // Destroi a bala na rede
         }
     }
 
-    // Implementação do método Fire da interface IWeapon
     public void Fire()
     {
         if (Time.time >= nextFireTime)
         {
-            // Chama o método RPC para disparar a bala
-            photonView.RPC("RPCFireBullet", RpcTarget.All, firePoint.position, firePoint.rotation);
+            // Chama o método RPC para disparar a bala, apenas para os outros jogadores
+            photonView.RPC("RPCFireBullet", RpcTarget.Others, firePoint.position, firePoint.rotation);
+            // Instancia o projétil localmente sem usar o RPC para evitar instanciar duas vezes
+            FireBulletLocally(firePoint.position, firePoint.rotation);
             nextFireTime = Time.time + reloadTime;
         }
     }
@@ -53,14 +52,20 @@ public class Bullet : MonoBehaviourPun, IWeapon
     [PunRPC]
     void RPCFireBullet(Vector3 position, Quaternion rotation)
     {
-        // Instancia o projétil na rede
-        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, position, rotation);
+        // Instancia o projétil na rede para outros jogadores
+        FireBulletLocally(position, rotation);
+    }
 
-        // Aplica movimento para frente na bala
+    void FireBulletLocally(Vector3 position, Quaternion rotation)
+    {
+        // Instancia o projétil localmente
+        GameObject bullet = Instantiate(bulletPrefab, position, rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        // Aplica movimento à bala
         if (rb != null)
         {
-            rb.velocity = firePoint.up * bulletSpeed;  // Move a bala na direção do firePoint
+            rb.velocity = firePoint.up * bulletSpeed;
         }
     }
 }

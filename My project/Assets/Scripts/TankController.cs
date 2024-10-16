@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TankController : MonoBehaviourPun, IDamageable
@@ -72,7 +70,12 @@ public class TankController : MonoBehaviourPun, IDamageable
     {
         if (bulletPrefab && firePoint)
         {
-            PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, firePoint.rotation);
+            // Instancia o projétil apenas localmente e deixa o script Bullet cuidar da sincronização
+            Bullet bullet = GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                bullet.Fire();
+            }
         }
     }
 
