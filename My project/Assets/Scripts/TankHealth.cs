@@ -23,18 +23,22 @@ public class TankHealth : MonoBehaviourPun
     }
 
     [PunRPC]
-    void RPCTakeDamage(float damage)
+    void RPCTakeDamage(int damageAmount)
     {
-        currentHealth -= damage;
+        currentHealth -= damageAmount;
+        Debug.Log($"Dano recebido: {damageAmount}, Saúde atual: {currentHealth}");
+
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
         UpdateHealthBar();
 
         if (currentHealth <= 0)
         {
+            Debug.Log("Jogador morreu.");
             Die();
         }
     }
+
 
     void UpdateHealthBar()
     {

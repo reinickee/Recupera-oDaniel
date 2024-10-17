@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 9220283956942054976}
   - component: {fileID: 3638981815912718336}
   - component: {fileID: -2803186454766083582}
+  - component: {fileID: 6266718727729757066}
   m_Layer: 0
   m_Name: bulletPrefab
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -181,3 +182,20 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &6266718727729757066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3092659666145155582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d07281cf169c604b9fb00e97aea8319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 3092659666145155582}
+  firePoint: {fileID: 0}
+  reloadTime: 1
+  bulletSpeed: 10
+  damageAmount: 20

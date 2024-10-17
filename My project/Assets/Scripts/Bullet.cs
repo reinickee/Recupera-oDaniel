@@ -32,7 +32,7 @@ public class Bullet : MonoBehaviourPun, IWeapon
     void OnCollisionEnter2D(Collision2D collision)
     {
         // Verifica se o objeto colidido é um tanque
-        if (collision.gameObject.CompareTag(bulletPrefab.name))
+        if (collision.gameObject.CompareTag("Tank"))
         {
             // Aplica dano ao tanque atingido via RPC
             if (photonView.IsMine)

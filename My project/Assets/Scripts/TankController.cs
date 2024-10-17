@@ -78,8 +78,25 @@ public class TankController : MonoBehaviourPun, IDamageable
             }
         }
     }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Verifica se o objeto colidido é um projétil
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            // Aqui você pode pegar a referência ao componente Bullet para obter informações, se necessário
+            Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                // Aplica dano ao tanque, passando o dano da bala
+                TakeDamage(bullet.damageAmount);
+                // Destroi o projétil após a colisão
+                PhotonNetwork.Destroy(collision.gameObject);
+            }
+        }
+    }
 
-    public void TakeDamage(int damageAmount)
+
+    public void TakeDamage(float damageAmount)
     {
         photonView.RPC("RPCTakeDamage", RpcTarget.All, damageAmount);
     }
