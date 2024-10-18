@@ -99,7 +99,7 @@ public class TankController : MonoBehaviourPun, IDamageable
             // Log para verificar se a colisão ocorre
             Debug.Log("Colisão com outro tanque detectada, sem dano aplicado.");
             // Não aplicar dano ou qualquer lógica adicional
-        }
+        }   
     }
 
 

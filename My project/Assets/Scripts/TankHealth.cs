@@ -26,7 +26,6 @@ public class TankHealth : MonoBehaviourPun
     void RPCTakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
-        Debug.Log($"Dano recebido: {damageAmount}, Saúde atual: {currentHealth}");
 
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
