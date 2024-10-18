@@ -596,7 +596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 0
+  currentHealth: 100
   healthBarForeground: {fileID: 9191831794818613888}
 --- !u!61 &1121794172398940840
 BoxCollider2D:

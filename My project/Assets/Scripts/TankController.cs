@@ -83,7 +83,6 @@ public class TankController : MonoBehaviourPun, IDamageable
         // Verifica se o objeto colidido é um projétil
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            // Aqui você pode pegar a referência ao componente Bullet para obter informações, se necessário
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             if (bullet != null)
             {
@@ -93,7 +92,16 @@ public class TankController : MonoBehaviourPun, IDamageable
                 PhotonNetwork.Destroy(collision.gameObject);
             }
         }
+
+        // Adicionando verificação para não causar dano entre tanques
+        if (collision.gameObject.CompareTag("Tank") && collision.gameObject != gameObject)
+        {
+            // Log para verificar se a colisão ocorre
+            Debug.Log("Colisão com outro tanque detectada, sem dano aplicado.");
+            // Não aplicar dano ou qualquer lógica adicional
+        }
     }
+
 
 
     public void TakeDamage(float damageAmount)
