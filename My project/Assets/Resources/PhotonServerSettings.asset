@@ -45,6 +45,8 @@ MonoBehaviour:
   - RPCFireBullet
   - RPCTakeDamage
   - RPCUpdateScore
+  - DisableGameObject
+  - OnTriggerEnter2D
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -451,9 +451,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3035379130049526855}
   - {fileID: 4477089396251144643}
   - {fileID: 769293509011744142}
-  - {fileID: 3035379130049526855}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 359.499}
 --- !u!114 &6733429220961398781
@@ -583,6 +583,7 @@ MonoBehaviour:
   reloadTime: 1
   bulletSpeed: 10
   damageAmount: 20
+  bulletLifeTime: 40
 --- !u!114 &-8333722940318669962
 MonoBehaviour:
   m_ObjectHideFlags: 0
