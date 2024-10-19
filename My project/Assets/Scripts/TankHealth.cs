@@ -9,7 +9,6 @@ public class TankHealth : MonoBehaviourPun
     public float maxHealth = 100f, currentHealth;
     public Image healthBarForeground;
 
-    // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
@@ -23,12 +22,12 @@ public class TankHealth : MonoBehaviourPun
     }
 
     [PunRPC]
-    void RPCTakeDamage(int damageAmount)
+    void RPCTakeDamage(float damageAmount) // Altere para 'float' se estiver usando 'float'
     {
         currentHealth -= damageAmount;
+        Debug.Log($"Dano recebido: {damageAmount}, Saúde atual: {currentHealth}");
 
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
-
         UpdateHealthBar();
 
         if (currentHealth <= 0)
@@ -37,7 +36,6 @@ public class TankHealth : MonoBehaviourPun
             Die();
         }
     }
-
 
     void UpdateHealthBar()
     {

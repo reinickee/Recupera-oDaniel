@@ -29,11 +29,13 @@ public class Bullet : MonoBehaviourPun, IWeapon
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         // Verifica se o objeto colidido é um tanque
         if (collision.gameObject.CompareTag("Tank"))
         {
+            Debug.Log("Colidiu com um tanque!");
+
             // Verifica se a colisão é entre um tanque e uma bala (não dois tanques)
             if (gameObject.CompareTag("Bullet"))
             {
@@ -47,12 +49,7 @@ public class Bullet : MonoBehaviourPun, IWeapon
                         tankHealth.TakeDamage(damageAmount);
                     }
                 }
-
-                // Destroi a bala após colidir com o tanque
-                if (photonView.IsMine)
-                {
-                    PhotonNetwork.Destroy(gameObject);  // Certifique-se de que está destruindo apenas a bala!
-                }
+                    PhotonNetwork.Destroy(gameObject);
             }
         }
     }

@@ -78,7 +78,10 @@ public class TankController : MonoBehaviourPun, IDamageable
             }
         }
     }
+
     
+
+
     public void TakeDamage(float damageAmount)
     {
         photonView.RPC("RPCTakeDamage", RpcTarget.All, damageAmount);
