@@ -34,24 +34,29 @@ public class Bullet : MonoBehaviourPun, IWeapon
         // Verifica se o objeto colidido é um tanque
         if (collision.gameObject.CompareTag("Tank"))
         {
-            // Aplica dano ao tanque atingido via RPC
-            if (photonView.IsMine)
+            // Verifica se a colisão é entre um tanque e uma bala (não dois tanques)
+            if (gameObject.CompareTag("Bullet"))
             {
-                TankHealth tankHealth = collision.gameObject.GetComponent<TankHealth>();
-                if (tankHealth != null)
+                // Aplica dano ao tanque atingido via RPC
+                if (photonView.IsMine)
                 {
-                    // Aplica dano ao tanque via RPC
-                    tankHealth.TakeDamage(damageAmount);
+                    TankHealth tankHealth = collision.gameObject.GetComponent<TankHealth>();
+                    if (tankHealth != null)
+                    {
+                        // Aplica dano ao tanque
+                        tankHealth.TakeDamage(damageAmount);
+                    }
+                }
+
+                // Destroi a bala após colidir com o tanque
+                if (photonView.IsMine)
+                {
+                    PhotonNetwork.Destroy(gameObject);  // Certifique-se de que está destruindo apenas a bala!
                 }
             }
         }
-
-        // Destroi a bala na rede após a colisão
-        if (photonView.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
     }
+
 
     public void Fire()
     {

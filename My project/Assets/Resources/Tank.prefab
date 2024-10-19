@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 8353046689449024406}
   - component: {fileID: -8333722940318669962}
   - component: {fileID: 1121794172398940840}
-  - component: {fileID: -2295670961390171381}
+  - component: {fileID: 2304617120927039918}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Tank
@@ -643,7 +643,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.81, y: 1.63}
   m_EdgeRadius: 0
---- !u!50 &-2295670961390171381
+--- !u!50 &2304617120927039918
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
