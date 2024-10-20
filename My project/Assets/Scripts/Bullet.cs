@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 
+[RequireComponent(typeof(PhotonView))]
 public class Bullet : MonoBehaviourPun, IWeapon
 {
     public GameObject bulletPrefab; // Prefab da bala (não usado nesse script, mas pode ser útil)
@@ -29,33 +30,55 @@ public class Bullet : MonoBehaviourPun, IWeapon
     {
         if (Time.time >= nextFireTime)
         {
-            // Instancia a bala na rede
+            // Instancia a bala na rede usando PhotonNetwork.Instantiate
             GameObject bullet = PhotonNetwork.Instantiate("bulletPrefab", firePoint.position, firePoint.rotation);
             Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.SetShooter(photonView.ViewID); // Define quem atirou
-            Debug.Log("Atirador ID: " + photonView.ViewID);
+
+            // Certifique-se de que o ID do jogador que atirou seja válido
+            if (photonView != null)
+            {
+                bulletScript.SetShooter(photonView.ViewID); // Define o ID de quem atirou
+                Debug.Log("Atirador ID (photonView): " + photonView.ViewID);
+            }
+            else
+            {
+                Debug.LogError("PhotonView não encontrado no jogador!");
+            }
+
+            // Aplica movimento à bala
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = transform.up * bulletSpeed; // Dispara a bala
+            }
+
+            nextFireTime = Time.time + reloadTime; // Define o tempo para o próximo disparo
         }
     }
+
+
 
     public void SetShooter(int id)
     {
         shooterId = id; // Armazena o ID do jogador que atirou
     }
 
+    private bool hasHit = false;
+
     [PunRPC]
     void OnTriggerEnter2D(Collider2D collision)
     {
         // Verifica se o objeto colidido tem o componente TankHealth (um tanque ou jogador)
         TankHealth tankHealth = collision.gameObject.GetComponent<TankHealth>();
-        if (tankHealth != null)
+        if (tankHealth != null && tankHealth.photonView != null && shooterId != 0)
         {
             Debug.Log("ID do jogador atingido: " + tankHealth.photonView.ViewID);
             Debug.Log("ID do atirador: " + shooterId);
 
-            // Aplica dano apenas se o jogador atingido não for o dono do tiro
+            // Aplica dano apenas se o jogador atingido não for o dono do tiro e ambos os IDs são válidos
             if (tankHealth.photonView.ViewID != shooterId)
             {
-                tankHealth.TakeDamage(damageAmount); // Aplica o dano ao jogador atingido
+                tankHealth.TakeDamage(damageAmount, shooterId); // Aplica o dano ao jogador atingido
                 Debug.Log("Dano aplicado ao jogador com ID: " + tankHealth.photonView.ViewID);
             }
             else
@@ -66,13 +89,11 @@ public class Bullet : MonoBehaviourPun, IWeapon
             // Desativa a bala em todos os clientes
             photonView.RPC("DisableGameObject", RpcTarget.All);
         }
+        else
+        {
+            Debug.LogWarning("O ID do jogador ou atirador é inválido.");
+        }
     }
 
 
-
-    [PunRPC]
-    void DisableGameObject()
-    {
-        gameObject.SetActive(false); // Desativa o objeto (a bala) ao colidir
-    }
 }
