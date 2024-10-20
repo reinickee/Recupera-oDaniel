@@ -80,14 +80,15 @@ public class Bullet : MonoBehaviourPun, IWeapon
             {
                 tankHealth.TakeDamage(damageAmount, shooterId); // Aplica o dano ao jogador atingido
                 Debug.Log("Dano aplicado ao jogador com ID: " + tankHealth.photonView.ViewID);
+                // Desativa a bala em todos os clientes
+                photonView.RPC("DisableGameObject", RpcTarget.All);
             }
             else
             {
                 Debug.Log("O jogador que atirou não pode ser atingido.");
             }
 
-            // Desativa a bala em todos os clientes
-            photonView.RPC("DisableGameObject", RpcTarget.All);
+
         }
         else
         {
@@ -95,5 +96,10 @@ public class Bullet : MonoBehaviourPun, IWeapon
         }
     }
 
+    [PunRPC]
+    void DisableGameObject()
+    {
+        gameObject.SetActive(false); // Desativa o objeto (a bala)
+    }
 
 }
