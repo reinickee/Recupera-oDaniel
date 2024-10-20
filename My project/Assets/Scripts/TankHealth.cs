@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class TankHealth : MonoBehaviourPun
+public class TankHealth : MonoBehaviourPun, IDamageable
 {
     public float maxHealth = 100f, currentHealth;
     public Image healthBarForeground;

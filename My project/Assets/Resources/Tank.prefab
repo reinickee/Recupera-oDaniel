@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 7271741969403235655}
   - component: {fileID: 8004044321655097420}
   - component: {fileID: 664141730438908790}
+  - component: {fileID: 1188499598206084429}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -308,6 +309,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1188499598206084429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7252605455900663718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77645c56c7f74847bfc03bf817e5edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthBarForeground: {fileID: 9191831794818613888}
 --- !u!1 &7265362108692671470
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +335,7 @@ GameObject:
   - component: {fileID: 6124112040467190996}
   - component: {fileID: 5374627908171344892}
   - component: {fileID: 9191831794818613888}
+  - component: {fileID: 7112797314263543945}
   m_Layer: 5
   m_Name: Foreground
   m_TagString: Untagged
@@ -366,23 +383,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.012682426, g: 0.8962264, b: 0.022138443, a: 1}
+  m_Color: {r: 0.20401545, g: 0.8867924, b: 0.17150229, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 66efb24ed46044ab8a039599cbc47d7b, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillMethod: 0
+  m_FillAmount: 0.81
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7112797314263543945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7265362108692671470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77645c56c7f74847bfc03bf817e5edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  healthBarForeground: {fileID: 9191831794818613888}
 --- !u!1 &7819845336663504413
 GameObject:
   m_ObjectHideFlags: 0
