@@ -17,12 +17,11 @@ public class TankHealth : MonoBehaviourPun
 
     public void TakeDamage(float damage)
     {
-        // Chama o método RPC para aplicar dano
         photonView.RPC("RPCTakeDamage", RpcTarget.All, damage);
     }
 
     [PunRPC]
-    void RPCTakeDamage(float damageAmount) // Altere para 'float' se estiver usando 'float'
+    void RPCTakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;
         Debug.Log($"Dano recebido: {damageAmount}, Saúde atual: {currentHealth}");
@@ -32,7 +31,6 @@ public class TankHealth : MonoBehaviourPun
 
         if (currentHealth <= 0)
         {
-            Debug.Log("Jogador morreu.");
             Die();
         }
     }
@@ -47,7 +45,9 @@ public class TankHealth : MonoBehaviourPun
 
     void Die()
     {
-        // Aqui você pode adicionar lógica de morte, como animações ou efeitos
-        PhotonNetwork.Destroy(gameObject); // Destroi o tanque na rede
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject); // Destrói o tanque na rede
+        }
     }
 }

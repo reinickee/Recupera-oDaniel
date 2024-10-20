@@ -1,21 +1,20 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class TankController : MonoBehaviourPun, IDamageable
+public class TankController : MonoBehaviourPun
 {
     public float moveSpeed = 5f;
     public float rotateSpeed = 150f;
     public int maxHealth = 100;
     private int currentHealth;
-    public Vector2 minBounds;   // Limite mínimo para X e Y
-    public Vector2 maxBounds;   // Limite máximo para X e Y
+    public Vector2 minBounds;
+    public Vector2 maxBounds;
 
     public GameObject bulletPrefab;
     public Transform firePoint;
 
     void ClampPosition()
     {
-        // Limita a posição do jogador dentro dos bounds
         Vector3 clampedPosition = transform.position;
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
@@ -36,7 +35,6 @@ public class TankController : MonoBehaviourPun, IDamageable
     {
         currentHealth = maxHealth;
 
-        // Apenas o jogador local controla o tanque
         if (!photonView.IsMine)
         {
             Destroy(GetComponent<Rigidbody2D>());
@@ -70,7 +68,6 @@ public class TankController : MonoBehaviourPun, IDamageable
     {
         if (bulletPrefab && firePoint)
         {
-            // Instancia o projétil apenas localmente e deixa o script Bullet cuidar da sincronização
             Bullet bullet = GetComponent<Bullet>();
             if (bullet != null)
             {
@@ -79,39 +76,5 @@ public class TankController : MonoBehaviourPun, IDamageable
         }
     }
 
-    
-
-
-    public void TakeDamage(float damageAmount)
-    {
-        photonView.RPC("RPCTakeDamage", RpcTarget.All, damageAmount);
-    }
-
-    [PunRPC]
-    void RPCTakeDamage(int damageAmount)
-    {
-        currentHealth -= damageAmount;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        GameManager.instance.UpdateScore(PhotonNetwork.NickName);
-
-        if (photonView.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-            Invoke("Respawn", 3f); // Renasce após 3 segundos
-        }
-    }
-
-    void Respawn()
-    {
-        Vector3 spawnPosition = GameManager.instance.GetRandomSpawnPosition();
-        PhotonNetwork.Instantiate(gameObject.name, spawnPosition, Quaternion.identity);
-    }
+    // Removido o método TakeDamage aqui
 }
