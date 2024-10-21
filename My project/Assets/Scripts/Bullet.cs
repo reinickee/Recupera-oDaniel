@@ -1,40 +1,44 @@
 using UnityEngine;
 using Photon.Pun;
 
+// Classe que representa a bala disparada
 [RequireComponent(typeof(PhotonView))]
 public class Bullet : MonoBehaviourPun, IWeapon
 {
-    public GameObject bulletPrefab; // Prefab da bala (não usado nesse script, mas pode ser útil)
-    public Transform firePoint; // Ponto de disparo da bala
-    public float reloadTime = 1f; // Tempo de recarga
-    private float nextFireTime = 0f; // Próximo tempo para disparo
-    public float bulletSpeed = 30f; // Velocidade da bala
-    public float damageAmount = 20f; // Quantidade de dano que a bala causa
+    public GameObject bulletPrefab; 
+    public Transform firePoint;
+    public float reloadTime = 1f; 
+    private float nextFireTime = 0f; 
+    public float bulletSpeed = 30f;
+    public float damageAmount = 20f; 
 
-    private int shooterId; // ID do jogador que atirou
+    private int shooterId; 
 
+    // Propriedade para obter o tempo de recarga
     public float ReloadTime
     {
         get { return reloadTime; }
     }
 
+    // Atualiza a cada frame, verifica se o jogador pode disparar
     void Update()
     {
         if (photonView.IsMine && Input.GetKeyDown(KeyCode.Space))
         {
-            Fire();
+            Fire(); 
         }
     }
 
+    // Método para disparar a bala
     public void Fire()
     {
         if (Time.time >= nextFireTime)
         {
-            // Instancia a bala na rede usando PhotonNetwork.Instantiate
+            
             GameObject bullet = PhotonNetwork.Instantiate("bulletPrefab", firePoint.position, firePoint.rotation);
             Bullet bulletScript = bullet.GetComponent<Bullet>();
 
-            // Certifique-se de que o ID do jogador que atirou seja válido
+            
             if (photonView != null)
             {
                 bulletScript.SetShooter(photonView.ViewID); // Define o ID de quem atirou
@@ -49,46 +53,43 @@ public class Bullet : MonoBehaviourPun, IWeapon
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.velocity = transform.up * bulletSpeed; // Dispara a bala
+                rb.velocity = transform.up * bulletSpeed; 
             }
 
-            nextFireTime = Time.time + reloadTime; // Define o tempo para o próximo disparo
+            nextFireTime = Time.time + reloadTime; 
         }
     }
 
-
-
+    // Método para definir o ID do jogador que atirou
     public void SetShooter(int id)
     {
-        shooterId = id; // Armazena o ID do jogador que atirou
+        shooterId = id; 
     }
 
-    private bool hasHit = false;
+    private bool hasHit = false; // Flag para controlar se a bala já atingiu um alvo
 
     [PunRPC]
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Verifica se o objeto colidido tem o componente TankHealth (um tanque ou jogador)
+        
         TankHealth tankHealth = collision.gameObject.GetComponent<TankHealth>();
         if (tankHealth != null && tankHealth.photonView != null && shooterId != 0)
         {
             Debug.Log("ID do jogador atingido: " + tankHealth.photonView.ViewID);
             Debug.Log("ID do atirador: " + shooterId);
 
-            // Aplica dano apenas se o jogador atingido não for o dono do tiro e ambos os IDs são válidos
+            
             if (tankHealth.photonView.ViewID != shooterId)
             {
-                tankHealth.TakeDamage(damageAmount, shooterId); // Aplica o dano ao jogador atingido
+                tankHealth.TakeDamage(damageAmount, shooterId); 
                 Debug.Log("Dano aplicado ao jogador com ID: " + tankHealth.photonView.ViewID);
-                // Desativa a bala em todos os clientes
+                
                 photonView.RPC("DisableGameObject", RpcTarget.All);
             }
             else
             {
                 Debug.Log("O jogador que atirou não pode ser atingido.");
             }
-
-
         }
         else
         {
@@ -96,10 +97,10 @@ public class Bullet : MonoBehaviourPun, IWeapon
         }
     }
 
+    // Método chamado para desativar o objeto (a bala)
     [PunRPC]
     void DisableGameObject()
     {
-        gameObject.SetActive(false); // Desativa o objeto (a bala)
+        gameObject.SetActive(false); // Desativa o objeto
     }
-
 }

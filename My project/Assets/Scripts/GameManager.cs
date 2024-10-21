@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private float timeRemaining;
     private Dictionary<string, int> playerScores = new Dictionary<string, int>();
 
+    // Método chamado ao iniciar o script
     void Start()
     {
         instance = this;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         EndGame();
     }
 
+    // Atualiza a UI do cronômetro
     void UpdateTimerUI()
     {
         timerText.text = "Time: " + Mathf.FloorToInt(timeRemaining).ToString();
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonView.RPC("RPCUpdateScore", RpcTarget.All, playerName);
     }
 
+    // Método RPC para atualizar a pontuação de um jogador
     [PunRPC]
     void RPCUpdateScore(string playerName)
     {
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         UpdateScoreUI();
     }
 
+    // Atualiza a UI da pontuação
     void UpdateScoreUI()
     {
         scoreText.text = "";
